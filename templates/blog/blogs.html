@@ -1,0 +1,45 @@
+{% extends 'mysite/base.html' %}
+
+{% block content %}
+
+<main class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h3 class="pb-4 font-italic border-bottom">
+                Django Lesson
+            </h3>
+
+            {% for obj in page_obj %}
+            <div class="blog-post">
+                <h2 class="blog-post-title">{{ obj.title }}</h2>
+                <p class="blog-post-meta">{{ obj.created_at }} by 
+                    <a href="#">{{ obj.author }}</a>
+                </p>
+                <p>{{ obj.text }}</p>
+                <a href="/blog/{{obj.id}}/">続きはこちら</a>
+            </div>
+            {% endfor %}
+
+            <nav class="blog-pagination">
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if page_obj.has_previous %}
+                            <a class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                        {% endif %}
+                
+                        {% if page_obj.has_next %}
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">next</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+            </nav>
+        </div>
+
+        {% include 'mysite/snippets/sidebar.html' %}
+    </div>
+</main>
+
+
+{% endblock %}
