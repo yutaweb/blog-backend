@@ -4,6 +4,7 @@ from blog.models import Article
 from mysite.forms import UserCreationForm
 from django.contrib import messages
 
+
 def index(request):
     objs = Article.objects.all()[:3]
     context = {
@@ -11,6 +12,7 @@ def index(request):
         'articles': objs,
     } 
     return render(request, 'mysite/index.html', context)
+
 
 class Login(LoginView):
     template_name = 'mysite/auth.html'
@@ -23,6 +25,7 @@ class Login(LoginView):
         messages.error(self.request, 'エラー！')
         return super().form_invalid(form)
 
+
 def signup(request):
     context = {}
     if request.method == 'POST':
@@ -33,3 +36,8 @@ def signup(request):
             messages.success(request, '登録完了！')
             return redirect('/')
     return render(request, 'mysite/auth.html', context)
+
+
+def mypage(request):
+    context = {}
+    return render(request, 'mysite/mypage.html', context)
