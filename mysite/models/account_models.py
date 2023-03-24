@@ -52,3 +52,16 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+
+
+# Userが作成された際（signup method）に、Profileを作成する。
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+
+from mysite.models.profile_models import Profile
+
+
+@receiver(post_save, sender=User)
+def create_onetoone(sender, **kwargs):
+    if kwargs["created"]:
+        Profile.objects.create(user=kwargs["instance"])

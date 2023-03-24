@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+from mysite.models.profile_models import Profile
+
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField()
 
@@ -8,7 +10,7 @@ class UserCreationForm(forms.ModelForm):
         model = get_user_model()
         fields = ('email',)
     
-    def clean_password(self):
+    def clean_password(self):  # is_validされたデータが入る
         password = self.cleaned_data.get("password")
         return password
 
@@ -18,3 +20,16 @@ class UserCreationForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = (
+            'username',
+            'zipcode',
+            'prefecture',
+            'city',
+            'address',
+        )
+        # exclude = ('user',) でも可能

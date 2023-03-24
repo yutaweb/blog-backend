@@ -18,12 +18,14 @@
             {% csrf_token %}
             <div class="col-12">
                 <label class="form-label">ユーザー名（公開されます）</label>
-                <input type="text" class="form-control" id="id_username" name="username" placeholder="煉獄 杏寿郎">
+                <input type="text" class="form-control" id="id_username" name="username" placeholder="" 
+                value="{{ user.profile.username }}">
               </div>
 
               <div class="col-md-2">
                 <label class="form-label">郵便番号</label>
-                <input type="text" class="form-control" id="id_zipcode" name="zipcode">
+                <input type="text" class="form-control" id="id_zipcode" name="zipcode"
+                value="{{ user.profile.zipcode }}">
               </div>
               <div class="col-md-4">
                 <label class="form-label">都道府県</label>
@@ -34,12 +36,14 @@
               </div>
               <div class="col-md-6">
                 <label class="form-label">市区</label>
-                <input type="text" class="form-control" id="id_city" name="city">
+                <input type="text" class="form-control" id="id_city" name="city"
+                value="{{ user.profile.city }}">
               </div>
               
             <div class="col-12">
               <label class="form-label">住所</label>
-              <input type="text" class="form-control" id="id_address" name="address" placeholder="">
+              <input type="text" class="form-control" id="id_address" name="address" placeholder=""
+              value="{{ user.profile.address }}">
             </div>
 
             <div class="col-12">
