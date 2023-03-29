@@ -14,10 +14,12 @@
 Django, Angular
 
 ## リポジトリ構成
-TODO
 
 ## 構成図
-TODO
+![ブログサイトの構成図 drawio](https://user-images.githubusercontent.com/64781052/228609497-f38ac2dd-5280-4c29-a3b0-2e4f888993aa.png)
+
+## ER図
+![ブログサイトのER図 drawio](https://user-images.githubusercontent.com/64781052/228609717-2cb09bb3-60e8-4df1-b0f1-e4a87df22043.png)
 
 ## 使用方法
 TODO
