@@ -11,6 +11,10 @@
             <p class="small text-muted text-right">{{ article.created_at }} {{ article.author }}</p>
             <p>{{ article.text }}</p>
 
+            {% include 'mysite/snippets/like_count.html' %}
+
+            {% include 'mysite/snippets/tag.html' %}
+
             <hr class="my-4">
             {% include 'mysite/snippets/comment.html' %}
 

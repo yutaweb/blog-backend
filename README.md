@@ -23,3 +23,8 @@ Django, Angular
 
 ## 使用方法
 TODO
+
+## メモ
+```
+find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+```
