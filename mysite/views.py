@@ -8,10 +8,12 @@ from django.contrib.auth import login
 
 
 def index(request):
+    ranks = Article.objects.order_by('-count')[:2]  # 降順
     objs = Article.objects.all()[:3]
     context = {
         'title': 'toyama',
         'articles': objs,
+        'ranks': ranks,
     } 
     return render(request, 'mysite/index.html', context)
 
