@@ -5,6 +5,8 @@ from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.core.mail import send_mail
+import os
 
 
 def index(request):
@@ -56,3 +58,21 @@ def mypage(request):
             profile.save()
             messages.success(request, '更新完了しました！')
     return render(request, 'mysite/mypage.html', context)
+
+
+def contact(request):
+    context = {}
+    if request.method == "POST":
+        subject = 'お問い合わせがありました'
+        message = "お名前： {}\nメールアドレス： {}\n内容： {}"\
+            .format(
+                request.POST.get('name'),
+                request.POST.get('email'),
+                request.POST.get('content')
+            )
+        email_from = os.environ['DEFAULT_EMAIL_FROM']
+        email_to = [os.environ['DEFAULT_EMAIL_FROM'],]
+        send_mail(subject, message, email_from, email_to)
+        messages.success(request, 'お問い合わせ頂きありがとうございます。')
+
+    return render(request, 'mysite/contact.html', context)
