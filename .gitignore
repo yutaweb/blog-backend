@@ -160,5 +160,5 @@ cython_debug/
 #.idea/
 
 # Secret
-.secret
-secret/
+.secrets
+secrets/
