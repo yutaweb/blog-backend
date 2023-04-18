@@ -15,6 +15,7 @@ def index(request):
     }
     return render(request, 'blog/blogs.html', context)
 
+
 def article(request, pk):
     obj = Article.objects.get(pk=pk)
     
@@ -37,6 +38,7 @@ def article(request, pk):
     }
 
     return render(request, 'blog/article.html', context)
+
 
 def tags(request, slug):
     tag = Tag.objects.get(slug=slug)

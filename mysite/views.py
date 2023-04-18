@@ -16,7 +16,7 @@ def index(request):
         'title': 'toyama',
         'articles': objs,
         'ranks': ranks,
-    } 
+    }
     return render(request, 'mysite/index.html', context)
 
 
@@ -24,7 +24,7 @@ class Login(LoginView):
     template_name = 'mysite/auth.html'
     
     def form_valid(self, form):
-        messages.success(self.request, 'ログイン完了！') 
+        messages.success(self.request, 'ログイン完了！')
         return super().form_valid(form)
     
     def form_invalid(self, form):
@@ -46,6 +46,7 @@ def signup(request):
             messages.success(request, '登録完了！')
             return redirect('/')
     return render(request, 'mysite/auth.html', context)
+
 
 @login_required
 def mypage(request):
@@ -71,7 +72,7 @@ def contact(request):
                 request.POST.get('content')
             )
         email_from = os.environ['DEFAULT_EMAIL_FROM']
-        email_to = [os.environ['DEFAULT_EMAIL_FROM'],]
+        email_to = [os.environ['DEFAULT_EMAIL_FROM'], ]
         send_mail(subject, message, email_from, email_to)
         messages.success(request, 'お問い合わせ頂きありがとうございます。')
 

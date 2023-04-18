@@ -6,6 +6,7 @@ from mysite.models.profile_models import Profile
 
 from mysite.forms import UserCreationForm
 
+
 class ProfileInline(admin.StackedInline):
     model = Profile
     can_delete = False
@@ -40,6 +41,7 @@ class CustomUserAdmin(UserAdmin):
     )
 
     add_form = UserCreationForm  # 管理画面から新規ユーザー登録
+
 
 admin.site.unregister(Group)
 admin.site.register(User, CustomUserAdmin)

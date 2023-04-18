@@ -8,7 +8,8 @@ class TagInline(admin.TabularInline):
 
 class ArticleAdmin(admin.ModelAdmin):
     inlines = [TagInline]
-    exclude = ['tags',]
+    exclude = ['tags', ]
+
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Comment)

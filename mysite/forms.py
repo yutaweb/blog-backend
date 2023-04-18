@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 from mysite.models.profile_models import Profile
 
+
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField()
 

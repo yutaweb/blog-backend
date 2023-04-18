@@ -14,6 +14,8 @@ import os
 
 from pathlib import Path
 
+from django.contrib import messages
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,7 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'livereload', # livereload
+    'livereload',  # livereload
     'django.contrib.staticfiles',
     'mysite',
     'blog',
@@ -151,14 +153,13 @@ LOGOUT_URL = '/logout/'
 LOGOUT_REDIRECT_URL = '/login/'
 
 # --------- massage tab with bootstrap alert class ---------------------
-from django.contrib import messages
 MESSAGE_TAGS = {
     messages.ERROR: 'rounded-0 alert alert-danger',
     messages.WARNING: 'rounded-0 alert alert-warning',
     messages.SUCCESS: 'rounded-0 alert alert-success',
     messages.INFO: 'rounded-0 alert alert-info',
     messages.DEBUG: 'rounded-0 alert alert-secondary',
- }
+}
 # --------- massage tab with bootstrap alert class ---------------------
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
