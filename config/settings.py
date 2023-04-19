@@ -27,20 +27,19 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-*d%=w+81slp2x%op_t7ne#))r(9g^#su)ycny$!h9a8y@4ukm3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
-
-if DEBUG:
-    # 開発環境
+DEBUG = False
+if os.getenv('GAE_APPLICATION', None):
+    # GAE 本番環境
+    ALLOWED_HOSTS = ['blog-site-384200.an.r.appspot.com']
+else:
+    # GAE 開発環境
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
     import yaml
     with open(os.path.join(BASE_DIR, 'secrets', 'secret_dev.yaml')) as file:
         objs = yaml.safe_load(file)
         for key in objs:
             os.environ[key] = objs[key]
-else:
-    # 本番環境
-    pass
 
 # Application definition
 
