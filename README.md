@@ -23,8 +23,15 @@ Django, Angular
 
 ## 使用方法
 TODO
+```
+gcloud app deploy --project blog-site-384200
+```
 
 ## メモ
 ```
+pycacheを削除したい場合
 find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
+
+requirements.txtを作成したい場合
+pip freeze >requirements.txt
 ```
