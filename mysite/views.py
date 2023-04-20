@@ -62,8 +62,15 @@ def mypage(request):
 
 
 def contact(request):
-    context = {}
+    context = {
+        'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY']
+    }
     if request.method == "POST":
+        recaptcha_token = request.POST.get("g-recaptcha-response")
+        res = grecaptcha_request(recaptcha_token)
+        if not res:
+            return messages.error(request, 'reCAPTCHA ERROR')
+
         subject = 'お問い合わせがありました'
         message = "お名前： {}\nメールアドレス： {}\n内容： {}"\
             .format(
@@ -77,3 +84,29 @@ def contact(request):
         messages.success(request, 'お問い合わせ頂きありがとうございます。')
 
     return render(request, 'mysite/contact.html', context)
+
+
+def grecaptcha_request(token):
+    from urllib import request, parse
+    import json
+    import ssl
+ 
+    context = ssl.SSLContext(ssl.PROTOCOL_TLS)
+ 
+    url = "https://www.google.com/recaptcha/api/siteverify"
+    headers = {'content-type': 'application/x-www-form-urlencoded'}
+    data = {
+        'secret': os.environ['GRECAPTCHA_SECRETKEY'],
+        'response': token,
+    }
+    data = parse.urlencode(data).encode()
+    req = request.Request(
+        url,
+        method="POST",
+        headers=headers,
+        data=data,
+    )
+    f = request.urlopen(req, context=context)
+    response = json.loads(f.read())
+    f.close()
+    return response['success']
