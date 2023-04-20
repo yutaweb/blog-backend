@@ -24,7 +24,12 @@ Django, Angular
 ## 使用方法
 TODO
 ```
+# GAEへデプロイ
 gcloud app deploy --project blog-site-384200
+
+
+# Cloud SQLへ接続
+./secrets/cloud-sql-proxy --port 3306 blog-site-384200:us-central1:blog-site-test-instance
 ```
 
 ## メモ
