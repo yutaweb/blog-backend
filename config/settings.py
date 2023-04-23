@@ -16,15 +16,14 @@ from pathlib import Path
 
 from django.contrib import messages
 
+from google.oauth2 import service_account
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-*d%=w+81slp2x%op_t7ne#))r(9g^#su)ycny$!h9a8y@4ukm3'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -40,6 +39,9 @@ else:
         objs = yaml.safe_load(file)
         for key in objs:
             os.environ[key] = objs[key]
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # Application definition
 
@@ -139,6 +141,16 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+GS_CREDENTIALS = service_account.Credentials.from_service_account_file(
+    os.path.join(BASE_DIR, 'secrets', os.environ['GCS_CREDENTIALS_FILENAME'])
+)
+
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+GS_BUCKET_NAME = os.environ['GCS_BUCKET_NAME']
+
+GS_PROJECT_ID = os.environ['GCS_PROJECT_ID']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
