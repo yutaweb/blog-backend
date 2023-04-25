@@ -3,9 +3,10 @@ from django.contrib.auth.views import LoginView
 from blog.models import Article
 from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.mail import send_mail
+from django.views import View
 import os
 
 
@@ -48,24 +49,31 @@ def signup(request):
     return render(request, 'mysite/auth.html', context)
 
 
-@login_required
-def mypage(request):
-    context = {}
-    if request.method == 'POST':
+class MypageView(LoginRequiredMixin, View):
+    def get(self, request):
+        context = {}
+        return render(request, 'mysite/mypage.html', context)
+    
+    def post(self, request):
+        context = {}
         form = ProfileForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save(commit=False)  # 紐づいているユーザーに対して保存する必要がある
             profile.user = request.user
             profile.save()
             messages.success(request, '更新完了しました！')
-    return render(request, 'mysite/mypage.html', context)
+        return render(request, 'mysite/mypage.html', context)
 
 
-def contact(request):
+class ContactView(View):
     context = {
         'grecaptcha_sitekey': os.environ['GRECAPTCHA_SITEKEY']
     }
-    if request.method == "POST":
+
+    def get(self, request):
+        return render(request, 'mysite/contact.html', self.context)
+
+    def post(self, request):
         recaptcha_token = request.POST.get("g-recaptcha-response")
         res = grecaptcha_request(recaptcha_token)
         if not res:
@@ -82,8 +90,7 @@ def contact(request):
         email_to = [os.environ['DEFAULT_EMAIL_FROM'], ]
         send_mail(subject, message, email_from, email_to)
         messages.success(request, 'お問い合わせ頂きありがとうございます。')
-
-    return render(request, 'mysite/contact.html', context)
+        return render(request, 'mysite/contact.html', self.context)
 
 
 def grecaptcha_request(token):
