@@ -2,6 +2,8 @@ from django.shortcuts import render
 from blog.models import Article, Comment, Tag
 from django.core.paginator import Paginator
 from blog.forms import CommentForm
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import JsonResponse
 
 
 def index(request):
@@ -52,3 +54,15 @@ def tags(request, slug):
         'page_number': page_number,
     }
     return render(request, 'blog/blogs.html', context)
+
+
+@ensure_csrf_cookie
+def like(request, pk):
+    d = {"message": "error"}
+    if request.method == 'POST':
+        obj = Article.objects.get(pk=pk)
+        obj.count += 1
+        obj.save()
+
+        d["message"] = "success"
+    return JsonResponse(d)
