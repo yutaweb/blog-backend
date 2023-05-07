@@ -94,39 +94,39 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 if os.getenv('GAE_APPLICATION', None):
     # 本番環境
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
     # DATABASES = {
     #     'default': {
-    #         'ENGINE': 'django.db.backends.mysql',
-    #         'NAME': os.environ['DB_NAME'],
-    #         'USER': os.environ['DB_USERNAME'],
-    #         'PASSWORD': os.environ['DB_USERPASS'],
-    #         'HOST': '/cloudsql/{}'.format(os.environ['DB_CONNECTION']),
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
     #     }
     # }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '/cloudsql/{}'.format(os.environ['DB_CONNECTION']),
+        }
+    }
 else:
     # 開発環境
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
     # DATABASES = {
     #     'default': {
-    #         'ENGINE': 'django.db.backends.mysql',
-    #         'NAME': os.environ['DB_NAME'],
-    #         'USER': os.environ['DB_USERNAME'],
-    #         'PASSWORD': os.environ['DB_USERPASS'],
-    #         'HOST': '127.0.0.1',
-    #         'PORT': '3306',
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
     #     }
     # }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': os.environ['DB_NAME'],
+            'USER': os.environ['DB_USERNAME'],
+            'PASSWORD': os.environ['DB_USERPASS'],
+            'HOST': '127.0.0.1',
+            'PORT': '3306',
+        }
+    }
 
 
 # Password validation
@@ -151,9 +151,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ja-jp'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Tokyo'
 
 USE_I18N = True
 
@@ -168,6 +168,8 @@ STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

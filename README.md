@@ -24,6 +24,9 @@ Django, Angular
 ## 使用方法
 TODO
 ```
+# 静的ファイルを集める
+python manage.py collectstatic
+
 # GAEへデプロイ
 gcloud app deploy --project blog-site-384200
 
