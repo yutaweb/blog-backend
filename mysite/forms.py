@@ -32,5 +32,6 @@ class ProfileForm(forms.ModelForm):
             'prefecture',
             'city',
             'address',
+            'image',
         )
         # exclude = ('user',) でも可能
