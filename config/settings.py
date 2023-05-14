@@ -113,22 +113,22 @@ if os.getenv('GAE_APPLICATION', None):
     }
 else:
     # 開発環境
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': BASE_DIR / 'db.sqlite3',
-    #     }
-    # }
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': os.environ['DB_NAME'],
-            'USER': os.environ['DB_USERNAME'],
-            'PASSWORD': os.environ['DB_USERPASS'],
-            'HOST': '127.0.0.1',
-            'PORT': '3306',
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.mysql',
+    #         'NAME': os.environ['DB_NAME'],
+    #         'USER': os.environ['DB_USERNAME'],
+    #         'PASSWORD': os.environ['DB_USERPASS'],
+    #         'HOST': '127.0.0.1',
+    #         'PORT': '3306',
+    #     }
+    # }
 
 
 # Password validation
