@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.contrib.auth import get_user_model
 from blog.models import Article, Comment, Tag
 from django.core.paginator import Paginator
 from blog.forms import CommentForm
@@ -20,7 +21,8 @@ def index(request):
 
 def article(request, pk):
     obj = Article.objects.get(pk=pk)
-    
+    is_already_exist = request.user not in obj.users.all()
+
     if request.method == 'POST':
         if request.POST.get('like_count', None):  # 取得失敗にNone
             obj.count += 1
@@ -36,7 +38,8 @@ def article(request, pk):
     comments = Comment.objects.filter(article=obj)
     context = {
         'article': obj,
-        'comments': comments
+        'comments': comments,
+        'is_already_exist': is_already_exist,
     }
 
     return render(request, 'blog/article.html', context)
@@ -61,8 +64,10 @@ def like(request, pk):
     d = {"message": "error"}
     if request.method == 'POST':
         obj = Article.objects.get(pk=pk)
-        obj.count += 1
-        obj.save()
+        if request.user.is_authenticated and request.user not in obj.users.all():
+            obj.users.add(request.user)
+            obj.count += 1
+            obj.save()
 
-        d["message"] = "success"
+            d["message"] = "success"
     return JsonResponse(d)

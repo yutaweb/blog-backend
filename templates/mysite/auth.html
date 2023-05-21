@@ -33,15 +33,14 @@
                 <button class="btn btn-primary btn-block my-3" type="submit">サインイン</button>
 
             </form>
-            {% if 'login' in request.path %}
             <div class="text-center">
+                {% if 'login' in request.path %}
                 <a href="/signup/" class="link-secondary">新規登録はこちら</a>
-            </div>
-            {% elif 'signup' in request.path %}
-            <div class="text-center">
+                <a href="/">ログインなしでの利用はこちら</a>
+                {% elif 'signup' in request.path %}
                 <a href="/login/" class="link-secondary">ログインはこちら</a>
+                {% endif %}
             </div>
-            {% endif %}
         </div>
     </div>
 </div>

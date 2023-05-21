@@ -31,9 +31,9 @@ python manage.py collectstatic
 # GAEへデプロイ
 gcloud app deploy --project blog-site-384200
 
-
 # Cloud SQLへ接続
 ./secrets/cloud-sql-proxy --port 3306 blog-site-384200:us-central1:blog-site-test-instance
+※コスト削減の為、停止している。
 ```
 
 ## メモ

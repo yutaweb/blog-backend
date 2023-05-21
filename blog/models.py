@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from mysite.models.account_models import User
 
 
 class Tag(models.Model):
@@ -18,6 +19,10 @@ class Article(models.Model):
     updated_at = models.DateField(auto_now=True)
     count = models.IntegerField(default=0)
     tags = models.ManyToManyField(Tag, blank=True)
+    users = models.ManyToManyField(User, blank=True)
+
+    def __str__(self):
+        return self.title
 
 
 class Comment(models.Model):
