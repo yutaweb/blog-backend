@@ -16,10 +16,11 @@ Django, Angular
 ## リポジトリ構成
 
 ## 構成図
-![ブログサイトの構成図 drawio](https://user-images.githubusercontent.com/64781052/230820033-67230c5e-f266-4ee6-b4a7-b4b17ce55f6d.png)
+![ブログサイトの構成図 drawio](https://github.com/yutaweb/blog/assets/64781052/637349e9-4140-47fb-91d7-fc3e0a9b5f42)
 
 ## ER図
-![ブログサイトのER図 drawio](https://user-images.githubusercontent.com/64781052/230820058-356ab7e6-163f-4f19-888f-346203ee312d.png)
+![ブログサイトのER図 drawio](https://github.com/yutaweb/blog/assets/64781052/96aac1df-532d-4dd3-91f8-96c0095d978b)
+
 
 ## 使用方法
 TODO
