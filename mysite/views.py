@@ -5,10 +5,17 @@ from mysite.forms import UserCreationForm, ProfileForm
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (
+    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+)
 from django.core.mail import send_mail
 from django.views import View
+from django.urls import reverse_lazy
 import os
 import payjp
+from .forms import (
+    MyPasswordForm, MySetPasswordForm
+)
 
 
 def index(request):
@@ -32,6 +39,31 @@ class Login(LoginView):
     def form_invalid(self, form):
         messages.error(self.request, 'エラー！')
         return super().form_invalid(form)
+
+
+class PasswordReset(PasswordResetView):
+    form_class = MyPasswordForm
+    subject_template_name = 'mail/subject.txt'
+    email_template_name = 'mail/password_reset.html'
+    template_name = 'mysite/password_reset.html'
+    success_url = reverse_lazy('mysite:password_reset_done')
+
+    # メーラーに表示されるメールタイトルを変更する
+
+
+class PasswordResetDone(PasswordResetDoneView):
+    template_name = 'mysite/password_reset_done.html'
+
+
+class PasswordResetConfirm(PasswordResetConfirmView):
+    # 有効期限は3日（https://akiyoko.hatenablog.jp/entry/2021/12/01/080000）
+    form_class = MySetPasswordForm
+    success_url = reverse_lazy('mysite:password_reset_complete')
+    template_name = 'mysite/password_reset_confirm.html'
+
+
+class PasswordResetComplete(PasswordResetCompleteView):
+    template_name = 'mysite/password_reset_complete.html'
 
 
 def signup(request):
