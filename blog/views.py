@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.contrib.auth import get_user_model
 from blog.models import Article, Comment, Tag
 from django.core.paginator import Paginator
 from blog.forms import CommentForm
