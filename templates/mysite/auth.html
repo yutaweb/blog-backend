@@ -31,13 +31,14 @@
 
                 <button class="btn btn-primary btn-block my-3" type="submit">サインイン</button>
 
+                {% if 'signup' in request.path %}
+                <a href="/login/" class="btn btn-secondary btn-block">ログインへ</a>
+                {% endif %}
             </form>
             <div class="text-center">
                 {% if 'login' in request.path %}
                 <a href="/signup/" class="link-secondary">≫ 新規登録</a><br/>
                 <a href="/password_reset/">≫ パスワードを忘れた方</a>
-                {% elif 'signup' in request.path %}
-                <a href="/login/" class="link-secondary">≫ ログイン</a>
                 {% endif %}
             </div>
         </div>
