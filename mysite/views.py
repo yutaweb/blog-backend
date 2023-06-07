@@ -6,7 +6,9 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
-    PasswordResetView, PasswordResetDoneView, PasswordResetConfirmView, PasswordResetCompleteView
+    PasswordChangeView, PasswordChangeDoneView,
+    PasswordResetView, PasswordResetDoneView,
+    PasswordResetConfirmView, PasswordResetCompleteView
 )
 from django.core.mail import send_mail
 from django.views import View
@@ -14,6 +16,7 @@ from django.urls import reverse_lazy
 import os
 import payjp
 from .forms import (
+    PasswordChangeForm,
     MyPasswordForm, MySetPasswordForm
 )
 
@@ -39,6 +42,16 @@ class Login(LoginView):
     def form_invalid(self, form):
         messages.error(self.request, 'エラー！')
         return super().form_invalid(form)
+
+
+class PasswordChange(LoginRequiredMixin, PasswordChangeView):
+    form_class = PasswordChangeForm
+    template_name = 'mysite/password_change.html'
+    success_url = reverse_lazy('mysite:password_change_done')
+
+
+class PasswordChangeDone(PasswordChangeDoneView):
+    template_name = 'mysite/password_change_done.html'
 
 
 class PasswordReset(PasswordResetView):

@@ -5,10 +5,10 @@ from mysite import views
 app_name = 'mysite'
 urlpatterns = [
     path('', views.index),
-    path('login/', views.Login.as_view()),
-    path('logout/', LogoutView.as_view()),
-    # path('password_change/', views.PasswordChange.as_view(), name='password_change'),
-    # path('password_change/done/', views.PasswordChangeDone.as_view(), name='password_change_done'),
+    path('login/', views.Login.as_view(), name='login'),
+    path('logout/', LogoutView.as_view(), name='logout'),
+    path('password_change/', views.PasswordChange.as_view(), name='password_change'),
+    path('password_change/done/', views.PasswordChangeDone.as_view(), name='password_change_done'),
     path('password_reset/', views.PasswordReset.as_view(), name='password_reset'),
     path('password_reset/done/', views.PasswordResetDone.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', views.PasswordResetConfirm.as_view(), name='password_reset_confirm'),

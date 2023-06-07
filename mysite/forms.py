@@ -1,6 +1,5 @@
 from django import forms
 from django.contrib.auth.forms import (
-    AuthenticationForm, PasswordChangeForm,
     PasswordResetForm, SetPasswordForm
 )
 from django.contrib.auth import get_user_model
@@ -42,6 +41,39 @@ class ProfileForm(forms.ModelForm):
         # exclude = ('user',) でも可能
 
 
+class PasswordChangeForm(SetPasswordForm):
+    """
+        ※class PasswordChangeForm(PasswordChangeForm):
+        用途：パスワード変更時のフォーム
+        参考：
+            https://docs.djangoproject.com/en/3.2/topics/auth/default/#django.contrib.auth.forms.PasswordChangeForm
+            https://github.com/django/django/blob/3.2/django/contrib/auth/views.py#L330
+    """
+    def __init__(self, user, *args, **kwargs):
+        super(PasswordChangeForm, self).__init__(user, *args, **kwargs)
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+    def clean_new_password1(self):
+        password1 = self.cleaned_data.get('new_password1')
+        if len(password1) < 8:
+            raise forms.ValidationError('パスワードは最低8文字以上必要です。', 'short_password')
+        return password1
+
+    def clean_new_password2(self):
+        password1 = self.cleaned_data.get('new_password1')
+        password2 = self.cleaned_data.get('new_password2')
+        if password1 and password2:
+            if password1 != password2:
+                raise forms.ValidationError('確認用パスワードを一致させてください。', 'password_mismatch')
+        if password2.lower() in self.user.email.lower():
+            raise forms.ValidationError('パスワードがメールアドレスと似ています。', 'password_mismatch')
+        regex = re.compile('((?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[?|@#$%]).{8,16})')
+        if regex.search(password1) is None:
+            raise forms.ValidationError('パスワード条件に準拠していません。', code='password_mismatch')
+        return password2
+
+
 class MyPasswordForm(PasswordResetForm):
     """
         用途：パスワード紛失時のフォーム
@@ -67,8 +99,7 @@ class MySetPasswordForm(SetPasswordForm):
         参考：https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/
     """
     def __init__(self, user, *args, **kwargs):
-        self.user = user
-        super(SetPasswordForm, self).__init__(*args, **kwargs)
+        super(SetPasswordForm, self).__init__(user, *args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
     
