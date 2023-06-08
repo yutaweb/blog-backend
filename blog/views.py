@@ -4,18 +4,17 @@ from django.core.paginator import Paginator
 from blog.forms import CommentForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
+from django.views.generic import ListView
 
 
-def index(request):
-    objs = Article.objects.all()
-    paginator = Paginator(objs, 2)
-    page_number = request.GET.get('page')
-    context = {
-        'page_title': 'ブログ一覧',
-        'page_obj': paginator.get_page(page_number),
-        'page_number': page_number,
-    }
-    return render(request, 'blog/blogs.html', context)
+class IndexView(ListView):
+    model = Article
+    paginate_by = 2
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['page_title'] = '記事一覧'
+        return context_data
 
 
 def article(request, pk):
