@@ -99,7 +99,8 @@ class MySetPasswordForm(SetPasswordForm):
         参考：https://docs.djangoproject.com/en/1.8/_modules/django/contrib/auth/forms/
     """
     def __init__(self, user, *args, **kwargs):
-        super(SetPasswordForm, self).__init__(user, *args, **kwargs)
+        self.user = user
+        super(SetPasswordForm, self).__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs['class'] = 'form-control'
     
