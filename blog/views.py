@@ -1,10 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from blog.models import Article, Comment, Tag
 from django.core.paginator import Paginator
 from blog.forms import CommentForm
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.http import JsonResponse
-from django.views.generic import ListView
+from django.views.generic import ListView, DetailView
 
 
 class IndexView(ListView):
@@ -17,30 +17,29 @@ class IndexView(ListView):
         return context_data
 
 
-def article(request, pk):
-    obj = Article.objects.get(pk=pk)
-    is_already_exist = request.user not in obj.users.all()
+class ArticleView(DetailView):
+    model = Article
+    # queryset = Article.objects.all()  # model = Articleと同義
 
-    if request.method == 'POST':
+    def get_context_data(self, **kwargs):
+        # getをオーバーライドしてrenderしても良い
+        context = super().get_context_data(**kwargs)
+        context['is_already_exist'] = self.request.user not in self.object.users.all()
+        context['comments'] = Comment.objects.filter(article=self.object)
+        return context
+
+    def post(self, request, *args, **kwargs):
         if request.POST.get('like_count', None):  # 取得失敗にNone
-            obj.count += 1
-            obj.save()
+            request.count += 1
+            request.save()
         else:
-            form = CommentForm(request.POST)
+            form = CommentForm(request.POST or None)
             if form.is_valid():
                 comment = form.save(commit=False)
                 comment.user = request.user
-                comment.article = obj
+                comment.article = Article.objects.get(pk=self.kwargs['pk'])
                 comment.save()
-
-    comments = Comment.objects.filter(article=obj)
-    context = {
-        'article': obj,
-        'comments': comments,
-        'is_already_exist': is_already_exist,
-    }
-
-    return render(request, 'blog/article.html', context)
+        return redirect('blog:detail', self.kwargs['pk'])
 
 
 def tags(request, slug):
