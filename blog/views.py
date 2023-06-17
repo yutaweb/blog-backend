@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import redirect
 from blog.models import Article, Comment, Tag
-from django.core.paginator import Paginator
 from blog.forms import CommentForm
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views import View
 from django.http import JsonResponse
 from django.views.generic import ListView, DetailView
 
@@ -42,29 +43,42 @@ class ArticleView(DetailView):
         return redirect('blog:detail', self.kwargs['pk'])
 
 
-def tags(request, slug):
-    tag = Tag.objects.get(slug=slug)
-    objs = tag.article_set.all()  # tagを参照しているartickeを逆参照で取得
+class Tags(ListView):
+    model = Tag
+    # queryset = Tag.article_set.all()
+    template_name = 'blog/article_list.html'
+    paginate_by = 10
 
-    paginator = Paginator(objs, 10)
-    page_number = request.GET.get('page')
-    context = {
-        'page_title': '記事一覧 #{}'.format(slug),
-        'page_obj': paginator.get_page(page_number),
-        'page_number': page_number,
-    }
-    return render(request, 'blog/blogs.html', context)
+    def get_queryset(self, **kwargs):
+        queryset = super().get_queryset(**kwargs)
+        queryset = queryset.get(slug=self.kwargs['slug'])
+        queryset = queryset.article_set.all()
+        # queryset = Tag.objects.get(slug=self.kwargs['slug']).article_set.all()
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        context_data['page_title'] = '記事一覧 #{}'.format(self.kwargs['slug'])
+        return context_data
 
 
-@ensure_csrf_cookie
-def like(request, pk):
+# View: get(), post()などHTTPメソッドに特化したビュー
+# https://di-acc2.com/programming/python/5210/
+class Like(View):
+    
     d = {"message": "error"}
-    if request.method == 'POST':
-        obj = Article.objects.get(pk=pk)
+
+    def get(self, request):
+        return JsonResponse(self.d)
+
+    # https://code-examples.net/ja/q/1330d0b
+    @method_decorator(ensure_csrf_cookie)
+    def post(self, request, *args, **kwargs):
+        obj = Article.objects.get(pk=self.kwargs['pk'])
         if request.user.is_authenticated and request.user not in obj.users.all():
             obj.users.add(request.user)
             obj.count += 1
             obj.save()
 
-            d["message"] = "success"
-    return JsonResponse(d)
+            self.d["message"] = "success"
+        return JsonResponse(self.d)

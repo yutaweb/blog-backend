@@ -4,7 +4,7 @@ from mysite import views
 
 app_name = 'mysite'
 urlpatterns = [
-    path('', views.index, name='home'),
+    path('', views.Index.as_view(), name='home'),
     path('login/', views.Login.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('password_change/', views.PasswordChange.as_view(), name='password_change'),
