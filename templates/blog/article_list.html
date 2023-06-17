@@ -5,13 +5,16 @@
 <main class="container">
     <div class="row">
         <div class="col-md-8">
-            <h3 class="pb-4 font-italic border-bottom display-6">
+            <h2 class="pb-4 font-italic display-6">
                 {{ page_title }}
-            </h3>
+            </h2>
+            <a href="{% url 'blog:create' %}" class="btn btn-block btn-success">新規作成</a>
+
+            <hr />
 
             {% for obj in object_list %}
             <div class="blog-post mb-3">
-                <h2 class="blog-post-title">{{ obj.title }}</h2>
+                <h3 class="blog-post-title">{{ obj.title }}</h3>
                 <p class="blog-post-meta">{{ obj.created_at }} by 
                     <a href="#">{{ obj.author }}</a>
                 </p>

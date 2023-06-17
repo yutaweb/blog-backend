@@ -68,11 +68,11 @@ class PasswordChange(LoginRequiredMixin, PasswordChangeView):
     success_url = reverse_lazy('mysite:password_change_done')
 
 
-class PasswordChangeDone(PasswordChangeDoneView):
+class PasswordChangeDone(LoginRequiredMixin, PasswordChangeDoneView):
     template_name = 'mysite/password_change_done.html'
 
 
-class PasswordReset(PasswordResetView):
+class PasswordReset(LoginRequiredMixin, PasswordResetView):
     form_class = MyPasswordForm
     subject_template_name = 'mail/subject.txt'
     email_template_name = 'mail/password_reset.html'

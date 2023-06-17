@@ -1,11 +1,13 @@
 from django.shortcuts import redirect
 from blog.models import Article, Comment, Tag
-from blog.forms import CommentForm
+from blog.forms import ArticleForm, CommentForm
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
 from django.http import JsonResponse
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class IndexView(ListView):
@@ -16,6 +18,13 @@ class IndexView(ListView):
         context_data = super().get_context_data(**kwargs)
         context_data['page_title'] = '記事一覧'
         return context_data
+
+
+class CreateArticleView(LoginRequiredMixin, CreateView):
+    form_class = ArticleForm
+    success_url = reverse_lazy('blog:list')
+    template_name = 'blog/article_form.html'
+    # 投稿ユーザを保存可能にする際にform_validを設ける。
 
 
 class ArticleView(DetailView):
