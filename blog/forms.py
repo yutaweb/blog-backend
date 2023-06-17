@@ -17,6 +17,7 @@ class ArticleForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['title'].label = 'タイトル'
         self.fields['text'].label = '本文'
+        self.fields['image'].label = '画像'
         self.fields['author'].label = '投稿者'
         self.fields['tags'].label = 'タグ'
         for field in self.fields.values():
@@ -27,6 +28,7 @@ class ArticleForm(forms.ModelForm):
         fields = (
             'title',
             'text',
+            'image',
             'author',
             'tags'
         )

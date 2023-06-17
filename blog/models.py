@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from mysite.models.account_models import User
+import os
 
 
 class Tag(models.Model):
@@ -11,9 +12,14 @@ class Tag(models.Model):
         return self.slug
 
 
+def upload_image_to(instance, filename):
+    return os.path.join('static', 'image', 'blogs', filename)
+
+
 class Article(models.Model):
     title = models.CharField(default="", max_length=30)
     text = models.TextField(default="")
+    image = models.ImageField(default="", blank=True, upload_to=upload_image_to)
     author = models.CharField(default="", max_length=30)
     created_at = models.DateField(auto_now_add=True)
     updated_at = models.DateField(auto_now=True)

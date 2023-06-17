@@ -5,7 +5,10 @@ import os
 
 def upload_image_to(instance, filename):
     user_id = str(instance.user.id)
-    return os.path.join('image', user_id, filename)
+    # GCS
+    # return os.path.join('image', user_id, filename)
+    # Local
+    return os.path.join('static', 'image', user_id, filename)
 
 
 class Profile(models.Model):
