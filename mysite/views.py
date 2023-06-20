@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.contrib.auth.views import LoginView
 from blog.models import Article
 from mysite.forms import UserCreationForm, ProfileForm
@@ -12,36 +12,54 @@ from django.contrib.auth.views import (
 )
 from django.core.mail import send_mail
 from django.views import View
+from django.views.generic import CreateView
 from django.urls import reverse_lazy
 import os
 import payjp
 from .forms import (
-    PasswordChangeForm,
+    PasswordChangeForm, LoginForm,
     MyPasswordForm, MySetPasswordForm
 )
 
 
-def index(request):
-    ranks = Article.objects.order_by('-count')[:2]  # 降順
-    objs = Article.objects.all()[:3]
-    context = {
-        'title': 'toyama',
-        'articles': objs,
-        'ranks': ranks,
-    }
-    return render(request, 'mysite/index.html', context)
+class Index(View):
+
+    def get(self, request):
+        ranks = Article.objects.order_by('-count')[:2]  # 降順
+        objs = Article.objects.all()[:3]
+        context = {
+            'title': 'toyama',
+            'articles': objs,
+            'ranks': ranks,
+        }
+        return render(request, 'mysite/index.html', context)
 
 
 class Login(LoginView):
-    template_name = 'mysite/auth.html'
-    
+    form_class = LoginForm
+
+    # バリデーション成功時に呼び出される
     def form_valid(self, form):
         messages.success(self.request, 'ログイン完了！')
         return super().form_valid(form)
     
+    # バリデーション失敗時に呼び出される
     def form_invalid(self, form):
         messages.error(self.request, 'エラー！')
         return super().form_invalid(form)
+
+
+class Signup(CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('mysite:home')
+    template_name = 'registration/signup.html'
+
+    def form_valid(self, form):
+        # self.objectにsave()されたuserオブジェクトが格納される
+        valid = super().form_valid(form)
+        login(self.request, self.object)
+        messages.success(self.request, '登録完了！')
+        return valid
 
 
 class PasswordChange(LoginRequiredMixin, PasswordChangeView):
@@ -77,22 +95,6 @@ class PasswordResetConfirm(PasswordResetConfirmView):
 
 class PasswordResetComplete(PasswordResetCompleteView):
     template_name = 'mysite/password_reset_complete.html'
-
-
-def signup(request):
-    context = {}
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save(commit=False)
-            user.save()
-
-            # 新規登録後にそのままログインさせる
-            login(request, user)
-
-            messages.success(request, '登録完了！')
-            return redirect('/')
-    return render(request, 'mysite/auth.html', context)
 
 
 class MypageView(LoginRequiredMixin, View):

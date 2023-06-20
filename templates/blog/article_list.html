@@ -9,8 +9,8 @@
                 {{ page_title }}
             </h3>
 
-            {% for obj in page_obj %}
-            <div class="blog-post">
+            {% for obj in object_list %}
+            <div class="blog-post mb-3">
                 <h2 class="blog-post-title">{{ obj.title }}</h2>
                 <p class="blog-post-meta">{{ obj.created_at }} by 
                     <a href="#">{{ obj.author }}</a>
@@ -24,13 +24,13 @@
                 <div class="pagination">
                     <span class="step-links">
                         {% if page_obj.has_previous %}
-                            <a class="btn btn-outline-primary" href="?page=1">&laquo; first</a>
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">previous</a>
+                            <a class="btn btn-outline-primary" href="?page=1">&laquo; 前へ</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">次へ</a>
                         {% endif %}
                 
                         {% if page_obj.has_next %}
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">next</a>
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">last &raquo;</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">前へ</a>
+                            <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">次へ &raquo;</a>
                         {% endif %}
                     </span>
                 </div>

@@ -4,16 +4,34 @@ from django.contrib.auth.forms import (
 )
 from django.contrib.auth import get_user_model
 from mysite.models.profile_models import Profile
+from django.contrib.auth.forms import AuthenticationForm
 
 import re
 
 
+class LoginForm(AuthenticationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['placeholder'] = 'メールアドレス'
+        self.fields['password'].widget.attrs['placeholder'] = 'パスワード'
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
+
+
 class UserCreationForm(forms.ModelForm):
     password = forms.CharField()
-
+    
     class Meta:
         model = get_user_model()
         fields = ('email',)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['email'].widget.attrs['placeholder'] = 'メールアドレス'
+        self.fields['password'].widget.attrs['placeholder'] = 'パスワード'
+        self.fields['password'].widget.attrs['type'] = 'password'
+        for field in self.fields.values():
+            field.widget.attrs['class'] = 'form-control'
     
     def clean_password(self):  # is_validされたデータが入る
         password = self.cleaned_data.get("password")
