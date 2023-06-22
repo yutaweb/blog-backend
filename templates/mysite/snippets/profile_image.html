@@ -9,7 +9,10 @@
             </svg>
         </div>
     </div>
-    <img id="image_preview" src="https://storage.googleapis.com/bondolog/{{ user.profile.image }}" alt="" class="{% if user.profile.image == '' %}d-none{% endif %} rounded-circle border" style="width: 150px; height: 150px; object-fit: contain;">
+    <!-- GCP -->
+    <!-- <img id="image_preview" src="https://storage.googleapis.com/bondolog/{{ user.profile.image }}" alt="" class="{% if user.profile.image == '' %}d-none{% endif %} rounded-circle border" style="width: 150px; height: 150px; object-fit: contain;"> -->
+    <!-- Local -->
+    <img id="image_preview" src="http://localhost:8000/{{ user.profile.image }}" alt="" class="{% if user.profile.image == '' %}d-none{% endif %} rounded-circle border" style="width: 150px; height: 150px; object-fit: contain;">
 </label>
 
 <div class="d-none">
