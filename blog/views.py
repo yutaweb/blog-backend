@@ -15,7 +15,7 @@ from operator import and_
 
 class IndexView(ListView):
     model = Article
-    paginate_by = 2
+    paginate_by = 3
     queryset = Article.objects.order_by('-created_at')
 
     def get_queryset(self):
