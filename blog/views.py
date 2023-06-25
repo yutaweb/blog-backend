@@ -8,15 +8,40 @@ from django.http import JsonResponse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Q
+from functools import reduce
+from operator import and_
 
 
 class IndexView(ListView):
     model = Article
     paginate_by = 2
+    queryset = Article.objects.order_by('-created_at')
+
+    def get_queryset(self):
+        # self.object, self.kwargs
+        # https://qiita.com/keishi04hrikzira/items/3e07cffa247895f841a0
+        queryset = Article.objects.order_by('-created_at')
+        query = self.request.GET.get('query')
+        if query:
+            exclusion = set([' ', '　'])
+            query_list = ''
+            for i in query:
+                if i in exclusion:
+                    pass
+                else:
+                    query_list += i
+
+            query = reduce(
+                and_, [Q(title__icontains=q) | Q(text__icontains=q) for q in query_list]
+            )
+            queryset = queryset.filter(query)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context_data = super().get_context_data(**kwargs)
         context_data['page_title'] = '記事一覧'
+        context_data['query'] = self.request.GET.get('query')
         return context_data
 
 

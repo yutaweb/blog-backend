@@ -8,36 +8,45 @@
             <h2 class="pb-4 font-italic display-6">
                 {{ page_title }}
             </h2>
+            <!-- 検索フォーム -->
+            <form class="my-2" style="display:flex; flex-direction:row;" method="GET" action="{% url 'blog:list' %}">
+                <input style="width:70%; min-width:300px; max-width: 600px;" class="form-control" type="search" name="query" placeholder="全文検索" value="{% if query %}{{ query }}{% endif %}">
+                <button style="width:20%; max-width:100px; margin-left:10px;" class="btn btn-primary" type="submit">検索</button>
+            </form>
+            <!-- 新規作成 -->
             <a href="{% url 'blog:create' %}" class="btn btn-block btn-success">新規作成</a>
 
             <hr />
 
-            {% for obj in object_list %}
-            <div class="blog-post mb-3">
-                <h3 class="blog-post-title">{{ obj.title }}</h3>
-                <p class="blog-post-meta">{{ obj.created_at }} by 
-                    <a href="#">{{ obj.author }}</a>
-                </p>
-                <p>{{ obj.text }}</p>
-                <a href="/blog/{{obj.id}}/">続きはこちら</a>
-            </div>
-            {% endfor %}
-
-            <nav class="blog-pagination">
-                <div class="pagination">
-                    <span class="step-links">
-                        {% if page_obj.has_previous %}
-                            <a class="btn btn-outline-primary" href="?page=1">&laquo; 前へ</a>
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}">次へ</a>
-                        {% endif %}
-                
-                        {% if page_obj.has_next %}
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}">前へ</a>
-                            <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}">次へ &raquo;</a>
-                        {% endif %}
-                    </span>
+            {% if object_list %}
+                {% for obj in object_list %}
+                <div class="blog-post mb-3">
+                    <h3 class="blog-post-title">{{ obj.title }}</h3>
+                    <p class="blog-post-meta">{{ obj.created_at }} by 
+                        <a href="#">{{ obj.author }}</a>
+                    </p>
+                    <p>{{ obj.text }}</p>
+                    <a href="/blog/{{obj.id}}/">続きはこちら</a>
                 </div>
-            </nav>
+                {% endfor %}
+                <nav class="blog-pagination">
+                    <div class="pagination">
+                        <span class="step-links">
+                            {% if page_obj.has_previous %}
+                                <a class="btn btn-outline-primary" href="?page=1{% if query %}&query={{ query }}{% endif %}">&laquo; 前へ</a>
+                                <a class="btn btn-outline-primary" href="?page={{ page_obj.previous_page_number }}{% if query %}&query={{ query }}{% endif %}">次へ</a>
+                            {% endif %}
+                    
+                            {% if page_obj.has_next %}
+                                <a class="btn btn-outline-primary" href="?page={{ page_obj.next_page_number }}{% if query %}&query={{ query }}{% endif %}">前へ</a>
+                                <a class="btn btn-outline-primary" href="?page={{ page_obj.paginator.num_pages }}{% if query %}&query={{ query }}{% endif %}">次へ &raquo;</a>
+                            {% endif %}
+                        </span>
+                    </div>
+                </nav>
+            {% else %}
+                <p>検索結果はありません。</p>
+            {% endif %}
         </div>
 
         {% include 'mysite/snippets/sidebar.html' %}
