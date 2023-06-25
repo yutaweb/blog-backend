@@ -23,7 +23,13 @@
                 {% endfor %}
                 
                 <div class="col-12">
-                    <button type="submit" class="btn btn-primary">新規作成</button>
+                    <button type="submit" class="btn btn-primary">
+                        {% if 'update' in request.path %}
+                            更新
+                        {% elif 'create' in request.path %}
+                            新規作成
+                        {% endif %}
+                    </button>
                 </div>
             </form>
         </div>

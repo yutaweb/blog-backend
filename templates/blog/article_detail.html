@@ -3,16 +3,20 @@
 
 {% block content %}
 
+<!-- {% cache 86400 article article.id %} -->
+<!-- {% endcache %} -->
 <main class="container">
     <div class="row">
         <div class="col-md-8">
-            {% cache 86400 article article.id %}
-            <h3 class="pb-4 font-italic">
+            <h3 class="font-italic">
                 {{ article.title }}
             </h3>
+            <div class="pt-2 pb-2">
+                <a href="{% url 'blog:update' article.pk %}" class="btn btn-block btn-success">更新</a>
+                <a href="{% url 'blog:delete' article.pk %}" class="btn btn-block btn-danger">削除</a>
+            </div>
             <p class="small text-muted text-right">{{ article.created_at }} {{ article.author }}</p>
-            <p>{{ article.text }}</p>
-            {% endcache %}
+            <p>{{ article.text | linebreaksbr }}</p>
             {% if article.image %}
             <img 
                 src="http://localhost:8000/{{ article.image }}"

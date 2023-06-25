@@ -5,7 +5,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
 from django.http import JsonResponse
-from django.views.generic import ListView, DetailView, CreateView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -50,6 +50,20 @@ class ArticleView(DetailView):
                 comment.article = Article.objects.get(pk=self.kwargs['pk'])
                 comment.save()
         return redirect('blog:detail', self.kwargs['pk'])
+
+
+class UpdateArticleView(UpdateView):
+    model = Article
+    form_class = ArticleForm
+
+    def get_success_url(self):
+        # https://stackoverflow.com/questions/59475392/success-url-from-updateview-to-detailview-with-pk-in-django#:~:text=You%20can%20use%20the%20get_success_url%20method%20in%20your,get_success_url%20%28self%29%3A%20return%20reverse_lazy%20%28%27account%3Agroup_detail%27%2C%20kwargs%3D%20%7B%27pk%27%3A%20self.object.pk%7D%29
+        return reverse_lazy('blog:detail', kwargs={'pk': self.object.pk})
+
+
+class DeleteArticleView(DeleteView):
+    model = Article
+    success_url = reverse_lazy('blog:list')
 
 
 class Tags(ListView):
