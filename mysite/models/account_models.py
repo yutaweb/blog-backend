@@ -56,7 +56,6 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
-# Userが作成された際（signup method）に、Profileを作成する。
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
